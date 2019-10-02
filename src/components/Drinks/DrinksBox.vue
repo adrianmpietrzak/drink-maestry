@@ -1,10 +1,10 @@
 <template>
   <ul class="box">
     <div class="box__category">
-      <h2 class="box__category-name">Random Drinks</h2>
+      <h2 class="box__category-name">{{ drinks.name }}</h2>
     </div>
     <DrinkCard
-      v-for="drink in drinks"
+      v-for="drink in drinks.drinks"
       :key="drink.idDrink"
       :data="drink"
     ></DrinkCard>
@@ -20,7 +20,7 @@ export default {
     DrinkCard
   },
   props: {
-    drinks: Array
+    drinks: Object
   }
 };
 </script>
