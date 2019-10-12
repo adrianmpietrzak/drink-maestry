@@ -1,11 +1,15 @@
 <template>
   <div class="home">
-    <template v-if="drinksLoaded === 4">
-      <DrinksBox :drinks="randomDrinks" />
-    </template>
-    <template v-else>
-      <div class="loader"></div>
-    </template>
+    <div class="random-drinks">
+      <template v-if="drinksLoaded === 4">
+        <DrinksBox :drinks="randomDrinks" />
+      </template>
+      <template v-else>
+        <div class="loader__wrapper">
+          <div class="loader"></div>
+        </div>
+      </template>
+    </div>
 
     <template>
       <DrinksBox :drinks="ingredientDrinks" />
@@ -88,3 +92,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.home {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+</style>

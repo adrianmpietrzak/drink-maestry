@@ -62,12 +62,14 @@ export default {
 @media (min-width: 768px) {
   .drink {
     flex: 1 0 calc(50% - 20px);
+    max-width: calc(50% - 20px);
   }
 }
 
 @media (min-width: 1024px) {
   .drink {
     flex: 1 0 calc(25% - 20px);
+    max-width: calc(25% - 20px);
   }
 }
 </style>

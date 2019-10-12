@@ -31,7 +31,10 @@ export default {
   padding: 20px;
   position: relative;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   list-style: none;
+  margin: 40px 0;
 }
 
 .box__category {

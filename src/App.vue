@@ -21,6 +21,10 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  background-color: $second-color;
+}
+
 .black {
   color: #000;
 }
