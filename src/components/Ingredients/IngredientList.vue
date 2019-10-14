@@ -1,5 +1,6 @@
 <template>
   <div class="ingredients">
+    <h1>Checked - {{ checked }}</h1>
     <h2>Ingredients List:</h2>
     <div class="ingredients__search-wrapper">
       <input
@@ -11,6 +12,39 @@
         v-model="search"
       />
       <button class="ingredients__search-close" @click="search = ''">x</button>
+    </div>
+    <div class="filters">
+      <h3>Search in:</h3>
+      <div class="filter">
+        <input
+          type="radio"
+          name="search-in"
+          value="all"
+          id="all"
+          v-model="searchIn"
+        />
+        <label class="filter__label" for="all">all</label>
+      </div>
+      <div class="filter">
+        <input
+          type="radio"
+          name="search-in"
+          value="owned"
+          id="owned"
+          v-model="searchIn"
+        />
+        <label class="filter__label" for="owned">owned</label>
+      </div>
+      <div class="filter">
+        <input
+          type="radio"
+          name="search-in"
+          value="notowned"
+          id="notowned"
+          v-model="searchIn"
+        />
+        <label class="filter__label" for="notowned">not owned</label>
+      </div>
     </div>
     <ul class="ingredients__list">
       <template v-for="ingredient in ingredients">
@@ -38,11 +72,17 @@ export default {
   },
   data() {
     return {
-      search: ''
+      search: '',
+      searchIn: 'all'
     };
   },
   components: {
     Ingredient
+  },
+  computed: {
+    checked() {
+      this.$store.state.ownedIngredients;
+    }
   }
 };
 </script>
@@ -63,12 +103,13 @@ export default {
 
 .ingredients__search-wrapper {
   position: relative;
-  display: inline-block;
+  // display: inline-block;
 }
 
 .ingredients__search {
   padding: 10px;
-  min-width: 300px;
+  // min-width: 300px;
+  width: 100%;
 }
 
 .ingredients__search-close {
@@ -83,7 +124,24 @@ export default {
   border: none;
 
   &:hover {
-    color: red;
+    color: $third-color;
   }
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.filter__label {
+  padding-left: 5px;
+  font-size: 0.875rem;
+  cursor: pointer;
 }
 </style>

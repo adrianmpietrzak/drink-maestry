@@ -55,7 +55,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   color: $second-color;
   overflow: scroll;
 }
@@ -71,8 +71,9 @@ body {
   cursor: pointer;
 
   &:hover {
-    color: $first-color;
-    background-color: $second-color;
+    // color: $first-color;
+    // background-color: $second-color;
+    color: $third-color;
   }
 }
 </style>

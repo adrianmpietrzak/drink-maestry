@@ -44,10 +44,16 @@ export default {
 .ingredient {
   flex: 1 0 100%;
   padding: 2px 0;
+
+  &:hover {
+    background-color: $second-color;
+    color: $first-color;
+  }
 }
 
 .ingredient__label {
   padding: 0 5px;
+  cursor: pointer;
 }
 
 @media (min-width: $breakpoint-tablet) {

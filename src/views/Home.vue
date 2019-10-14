@@ -14,10 +14,10 @@
     <template v-if="ingredientDrinks">
       <DrinksBox :drinks="ingredientDrinks" />
     </template>
-    <div class="popup" v-show="popupVisibile">
+    <!-- <div class="popup" v-show="popupVisibile">
       <IngredientsList :ingredients="allIngredients" />
       <button class="popup__close" @click="hideIngredients">x</button>
-    </div>
+    </div> -->
   </div>
 </template>
 

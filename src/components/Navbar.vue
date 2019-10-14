@@ -6,6 +6,9 @@
     </div>
     <button class="nav__ingrediets" @click="showIngredients">
       Ingredients
+      <span class="nav__ingrediets-counter">{{
+        $store.state.ownedIngredients.length
+      }}</span>
     </button>
   </div>
 </template>
@@ -44,6 +47,7 @@ export default {
 }
 
 .nav__ingrediets {
+  position: relative;
   display: flex;
   padding: 20px;
   border: none;
@@ -55,5 +59,20 @@ export default {
     background-color: $second-color;
     color: $first-color;
   }
+}
+
+.nav__ingrediets-counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.625rem;
+  background: $third-color;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $second-color;
 }
 </style>
