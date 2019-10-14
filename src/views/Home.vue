@@ -11,7 +11,7 @@
       </template>
     </div>
 
-    <template>
+    <template v-if="ingredientDrinks">
       <DrinksBox :drinks="ingredientDrinks" />
     </template>
   </div>
@@ -64,30 +64,34 @@ export default {
   computed: {
     // Get drinks from owned ingredients
     ingredientDrinks() {
-      const randomIngredient = this.$store.state.ownedIngredients[
-        Math.floor(Math.random() * this.$store.state.ownedIngredients.length)
-      ];
-      const randomIngredientDrinks = [];
-      const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
-      const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
-      for (let i = 0; i < drinksToShow; i++) {
-        const drink = drinks[Math.floor(Math.random() * drinks.length)];
-        let exist = false;
-        randomIngredientDrinks.map(el => {
-          if (el.idDrink === drink.idDrink) {
-            exist = true;
+      const ownedIngredients = this.$store.state.ownedIngredients;
+      if (ownedIngredients.length > 0) {
+        const randomIngredient =
+          ownedIngredients[Math.floor(Math.random() * ownedIngredients.length)];
+        const randomIngredientDrinks = [];
+        const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
+        const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
+        for (let i = 0; i < drinksToShow; i++) {
+          const drink = drinks[Math.floor(Math.random() * drinks.length)];
+          let exist = false;
+          randomIngredientDrinks.map(el => {
+            if (el.idDrink === drink.idDrink) {
+              exist = true;
+            }
+          });
+          if (!exist) {
+            randomIngredientDrinks.push(drink);
+          } else {
+            i--;
           }
-        });
-        if (!exist) {
-          randomIngredientDrinks.push(drink);
-        } else {
-          i--;
         }
+        return {
+          name: randomIngredient,
+          drinks: randomIngredientDrinks
+        };
+      } else {
+        return null;
       }
-      return {
-        name: randomIngredient,
-        drinks: randomIngredientDrinks
-      };
     }
   }
 };
