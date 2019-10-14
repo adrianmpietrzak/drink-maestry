@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     ingredients: [],
     ownedIngredients: [],
-    avilableDrinks: []
+    avilableDrinks: [],
+    displayIngredients: false
   },
   mutations: {
     setIngredients: (state, ingredients) => {
@@ -34,6 +35,14 @@ export default new Vuex.Store({
       state.avilableDrinks.push(...drinks);
       // const filteredDrinks = [...new Set(state.avilableDrinks)];
       // state.avilableDrinks = filteredDrinks;
+    },
+
+    hideIngredients: state => {
+      state.displayIngredients = false;
+    },
+
+    showIngredients: state => {
+      state.displayIngredients = true;
     }
   },
   actions: {
@@ -68,16 +77,33 @@ export default new Vuex.Store({
       });
     },
 
-    ingredientHandler: ({ commit }, { ingredient, checked }) => {
+    ingredientHandler: (
+      { commit, state, dispatch },
+      { ingredient, checked }
+    ) => {
       commit(checked ? 'addIngredient' : 'removeIngredient', ingredient);
-    },
 
-    saveOwnedIngredients: ({ state }) => {
+      if (!localStorage.getItem([ingredient])) {
+        console.log('teraz');
+        dispatch('addDrinks');
+      }
+
+      // dispatch('addDrinks');
+      console.log('ingredientHandler ', ingredient);
+      // console.log(localStorage.getItem([ingredient]));
       localStorage.setItem(
         'ownedIngredients',
         JSON.stringify(state.ownedIngredients)
       );
-      // dispatch("addDrinks");
+    },
+
+    saveOwnedIngredients: ({ dispatch, state }) => {
+      console.log('state => ');
+      // localStorage.setItem(
+      //   'ownedIngredients',
+      //   JSON.stringify(state.ownedIngredients)
+      // );
+      // dispatch('addDrinks');
     },
 
     getOwnedIngredients: ({ commit }) => {

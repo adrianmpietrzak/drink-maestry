@@ -14,6 +14,10 @@
     <template v-if="ingredientDrinks">
       <DrinksBox :drinks="ingredientDrinks" />
     </template>
+    <div class="popup" v-show="popupVisibile">
+      <IngredientsList :ingredients="allIngredients" />
+      <button class="popup__close" @click="hideIngredients">x</button>
+    </div>
   </div>
 </template>
 
@@ -32,7 +36,8 @@ export default {
         drinks: []
       },
       randomDrinksToShow: 4,
-      drinksLoaded: 0
+      drinksLoaded: 0,
+      ingredientDrinks: null
     };
   },
   watch: {
@@ -60,40 +65,84 @@ export default {
           }
         });
     }
+
+    if (this.ownedIngredients.length > 0) {
+      const randomIngredient = this.ownedIngredients[
+        Math.floor(Math.random() * this.ownedIngredients.length)
+      ];
+      const randomIngredientDrinks = [];
+      console.log(randomIngredient);
+      const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
+      const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
+      for (let i = 0; i < drinksToShow; i++) {
+        const drink = drinks[Math.floor(Math.random() * drinks.length)];
+        let exist = false;
+        randomIngredientDrinks.map(el => {
+          if (el.idDrink === drink.idDrink) {
+            exist = true;
+          }
+        });
+        if (!exist) {
+          randomIngredientDrinks.push(drink);
+        } else {
+          i--;
+        }
+      }
+      this.ingredientDrinks = {
+        name: randomIngredient,
+        drinks: randomIngredientDrinks
+      };
+    }
   },
   computed: {
-    // Get drinks from owned ingredients
-    ingredientDrinks() {
-      const ownedIngredients = this.$store.state.ownedIngredients;
-      if (ownedIngredients.length > 0) {
-        const randomIngredient =
-          ownedIngredients[Math.floor(Math.random() * ownedIngredients.length)];
-        const randomIngredientDrinks = [];
-        const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
-        const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
-        for (let i = 0; i < drinksToShow; i++) {
-          const drink = drinks[Math.floor(Math.random() * drinks.length)];
-          let exist = false;
-          randomIngredientDrinks.map(el => {
-            if (el.idDrink === drink.idDrink) {
-              exist = true;
-            }
-          });
-          if (!exist) {
-            randomIngredientDrinks.push(drink);
-          } else {
-            i--;
-          }
-        }
-        return {
-          name: randomIngredient,
-          drinks: randomIngredientDrinks
-        };
-      } else {
-        return null;
-      }
+    // allIngredients() {
+    //   return this.$store.state.ingredients;
+    // },
+
+    ownedIngredients() {
+      return this.$store.state.ownedIngredients;
     }
+
+    // popupVisibile() {
+    //   return this.$store.state.displayIngredients;
+    // }
+
+    // Get drinks from owned ingredients
+    // ingredientDrinks() {
+    //   if (this.ownedIngredients.length > 0) {
+    //     const randomIngredient = this.ownedIngredients[
+    //       Math.floor(Math.random() * this.ownedIngredients.length)
+    //     ];
+    //     const randomIngredientDrinks = [];
+    //     console.log(randomIngredient);
+    //     const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
+    //     const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
+    //     for (let i = 0; i < drinksToShow; i++) {
+    //       const drink = drinks[Math.floor(Math.random() * drinks.length)];
+    //       let exist = false;
+    //       randomIngredientDrinks.map(el => {
+    //         if (el.idDrink === drink.idDrink) {
+    //           exist = true;
+    //         }
+    //       });
+    //       if (!exist) {
+    //         randomIngredientDrinks.push(drink);
+    //       } else {
+    //         i--;
+    //       }
+    //     }
+    //     return {
+    //       name: randomIngredient,
+    //       drinks: randomIngredientDrinks
+    //     };
+    //   } else {
+    //     return null;
+    //   }
+    // }
   }
+  // methods: {
+  //   ...mapMutations(['hideIngredients'])
+  // }
 };
 </script>
 

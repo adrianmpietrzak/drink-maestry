@@ -4,12 +4,20 @@
       <router-link class="nav__link" to="/">Home</router-link>
       <router-link class="nav__link" to="/about">About</router-link>
     </div>
-    <button class="nav__ingrediets">Ingredients</button>
+    <button class="nav__ingrediets" @click="showIngredients">
+      Ingredients
+    </button>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapMutations } from 'vuex';
+export default {
+  name: 'Navbar',
+  methods: {
+    ...mapMutations(['showIngredients'])
+  }
+};
 </script>
 
 <style lang="scss">
