@@ -36,6 +36,7 @@ export default {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  box-shadow: -5px 10px 13px -8px rgba(0, 0, 0, 0.75);
 }
 
 .drink__image-wrapper {
