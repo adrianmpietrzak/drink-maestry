@@ -61,7 +61,7 @@ body {
 }
 
 .popup__close {
-  position: absolute;
+  position: fixed;
   right: 40px;
   top: 40px;
   color: $second-color;
@@ -69,6 +69,7 @@ body {
   background: none;
   font-size: 1.25rem;
   cursor: pointer;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
   &:hover {
     // color: $first-color;
