@@ -1,7 +1,6 @@
 <template>
   <div class="ingredients">
-    <h1>Checked - {{ checked }}</h1>
-    <h2>Ingredients List:</h2>
+    <h2 class="ingredients__header">Ingredients List</h2>
     <div class="ingredients__search-wrapper">
       <input
         class="ingredients__search"
@@ -51,11 +50,7 @@
         <Ingredient
           :key="ingredient.strIngredient1"
           :ingredient="ingredient.strIngredient1"
-          v-if="
-            ingredient.strIngredient1
-              .toLowerCase()
-              .includes(search.toLowerCase())
-          "
+          v-if="condition(ingredient)"
         />
       </template>
     </ul>
@@ -70,18 +65,38 @@ export default {
   props: {
     ingredients: Array
   },
+
   data() {
     return {
       search: '',
       searchIn: 'all'
     };
   },
+
   components: {
     Ingredient
   },
+
   computed: {
     checked() {
-      this.$store.state.ownedIngredients;
+      return this.$store.state.ownedIngredients;
+    }
+  },
+
+  methods: {
+    condition(ingredient) {
+      const searchInTest =
+        this.searchIn === 'owned'
+          ? this.checked.includes(ingredient.strIngredient1)
+          : this.searchIn === 'notowned'
+          ? !this.checked.includes(ingredient.strIngredient1)
+          : true;
+
+      return (
+        ingredient.strIngredient1
+          .toLowerCase()
+          .includes(this.search.toLowerCase()) && searchInTest
+      );
     }
   }
 };
@@ -90,6 +105,10 @@ export default {
 <style lang="scss" scoped>
 .ingredients {
   padding: 40px;
+}
+
+.ingredients__header {
+  text-align: center;
 }
 
 .ingredients__list {
@@ -103,12 +122,10 @@ export default {
 
 .ingredients__search-wrapper {
   position: relative;
-  // display: inline-block;
 }
 
 .ingredients__search {
   padding: 10px;
-  // min-width: 300px;
   width: 100%;
 }
 
