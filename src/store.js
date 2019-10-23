@@ -10,6 +10,7 @@ export default new Vuex.Store({
     avilableDrinks: [],
     displayIngredients: false
   },
+
   mutations: {
     setIngredients: (state, ingredients) => {
       state.ingredients = ingredients;
@@ -31,10 +32,7 @@ export default new Vuex.Store({
     },
 
     addDrink: (state, drinks) => {
-      console.log(drinks);
       state.avilableDrinks.push(...drinks);
-      // const filteredDrinks = [...new Set(state.avilableDrinks)];
-      // state.avilableDrinks = filteredDrinks;
     },
 
     hideIngredients: state => {
@@ -45,6 +43,7 @@ export default new Vuex.Store({
       state.displayIngredients = true;
     }
   },
+
   actions: {
     checkStatus: () => {
       return new Promise(resolve => {
@@ -84,26 +83,13 @@ export default new Vuex.Store({
       commit(checked ? 'addIngredient' : 'removeIngredient', ingredient);
 
       if (!localStorage.getItem([ingredient])) {
-        console.log('teraz');
         dispatch('addDrinks');
       }
 
-      // dispatch('addDrinks');
-      console.log('ingredientHandler ', ingredient);
-      // console.log(localStorage.getItem([ingredient]));
       localStorage.setItem(
         'ownedIngredients',
         JSON.stringify(state.ownedIngredients)
       );
-    },
-
-    saveOwnedIngredients: ({ dispatch, state }) => {
-      console.log('state => ');
-      // localStorage.setItem(
-      //   'ownedIngredients',
-      //   JSON.stringify(state.ownedIngredients)
-      // );
-      // dispatch('addDrinks');
     },
 
     getOwnedIngredients: ({ commit }) => {
@@ -158,7 +144,6 @@ export default new Vuex.Store({
       });
       Promise.all(promises).then(() => {
         const uniqueDrinks = getUnique(tempDrinks, 'strDrink');
-        console.log('addDrinks prmise');
         state.avilableDrinks = uniqueDrinks;
       });
     }

@@ -37,10 +37,9 @@ export default {
         )
         .then(
           res => {
-            console.log(res.body.drinks[0]);
             const data = res.body.drinks[0];
             const ingredients = [];
-            const incstructions = data.strInstructions;
+            const instructions = data.strInstructions;
             for (let i = 1; i <= 15; i++) {
               const name = data[`strIngredient${i}`];
               const measure = data[`strMeasure${i}`];
@@ -53,7 +52,7 @@ export default {
               image: data.strDrinkThumb,
               glass: data.strGlass,
               ingredients,
-              incstructions,
+              instructions,
               alcoholic: data.strAlcoholic,
               category: data.strCategory
             };

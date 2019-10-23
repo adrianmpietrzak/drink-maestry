@@ -8,7 +8,6 @@
     />
     <label class="ingredient__label" :for="ingredient">{{ ingredient }}</label>
   </li>
-  <!-- @click="checkIngredient(ingredient.strIngredient1)" -->
 </template>
 
 <script>

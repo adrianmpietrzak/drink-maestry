@@ -3,7 +3,6 @@
     <div class="box__category">
       <h2 class="box__category-name">{{ drinks.name }}</h2>
     </div>
-    <!-- <strong>amount - {{ amount }} </strong> -->
     <template v-for="(drink, index) in drinks.drinks">
       <DrinkCard
         :key="drink.idDrink"
@@ -45,7 +44,7 @@ export default {
   color: $first-color;
   background: $second-color;
   position: absolute;
-  top: -28px;
+  top: -10px;
   padding: 10px;
   left: 50%;
   margin: 0;

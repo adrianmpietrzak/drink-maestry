@@ -16,9 +16,6 @@ export default new Router({
     {
       path: '/drinks',
       name: 'drinks',
-      // route level code-splitting
-      // this generates a separate chunk (drinks.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
         import(/* webpackChunkName: "drinks" */ './views/Drinks.vue')
     },

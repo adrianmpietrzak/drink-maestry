@@ -15,7 +15,7 @@
         </li>
       </ul>
       <span class="drink__subtitle">Instruction:</span>
-      <p>{{ drink.incstructions }}</p>
+      <p>{{ drink.instructions }}</p>
     </div>
   </div>
 </template>
@@ -55,10 +55,6 @@ export default {
   flex: 1 0 100%;
   bottom: 0;
   padding: 40px;
-  // background-color: rgba($color: $second-color, $alpha: 0.75);
-  // color: $first-color;
-  // background-color: rgba($color: $first-color, $alpha: 0.75);
-  // color: $second-color;
   background-color: $first-color;
   color: $second-color;
 }

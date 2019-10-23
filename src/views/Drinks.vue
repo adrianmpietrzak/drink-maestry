@@ -1,24 +1,12 @@
 <template>
-  <!-- <div>
-    <h1>Drnks here</h1>
-    {{ ownedIngredients }}
-    Width: {{ window.width }}, Height: {{ window.height }}
-    <ul class="box">
-      <template v-for="(drink, index) in drinks">
-        <DrinkCard
-          :key="drink.idDrink"
-          :data="drink"
-          v-if="index < amount"
-        ></DrinkCard>
-      </template>
-    </ul>
-  </div> -->
   <div class="container">
-    <h1>Drnks here</h1>
-    {{ ownedIngredients }}
-    Width: {{ window.width }}, Height: {{ window.height }}
-
-    <DrinksBox :drinks="drinks" :amount="amount"></DrinksBox>
+    <!-- To do - change this view to display 2 tabs all drinks from owned ingredients / all drinks -->
+    <DrinksBox
+      v-if="drinks.drinks.length > 0"
+      :drinks="drinks"
+      :amount="amount"
+    ></DrinksBox>
+    <h2 v-else>Choose some ingredients (temporary message)</h2>
   </div>
 </template>
 
@@ -51,15 +39,6 @@ export default {
           window.innerHeight +
           100 >
         document.documentElement.offsetHeight;
-      // console.log(
-      //   Math.max(
-      //     window.pageYOffset,
-      //     document.documentElement.scrollTop,
-      //     document.body.scrollTop
-      //   ),
-      //   window.innerHeight,
-      //   document.documentElement.offsetHeight
-      // );
       if (bottomOfWindow) {
         this.amount += this.amountToAdd;
       }
@@ -67,6 +46,7 @@ export default {
         window.removeEventListener('scroll', this.scroll);
       }
     },
+
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
@@ -80,11 +60,14 @@ export default {
     },
 
     drinks() {
-      return { name: 'All drinks', drinks: this.$store.state.avilableDrinks };
+      return {
+        name: 'Drinks from owned ingredients',
+        drinks: this.$store.state.avilableDrinks
+      };
     }
   },
+
   created() {
-    // this.$store.dispatch("addDrinks");
     this.$store.dispatch('addDrinks');
     window.addEventListener('scroll', this.scroll);
     window.addEventListener('resize', this.handleResize);
@@ -92,6 +75,7 @@ export default {
     this.amount =
       this.window.width < 768 ? 3 : this.window.width < 1024 ? 6 : 12;
   },
+
   destroyed() {
     window.removeEventListener('scroll', this.scroll);
     window.removeEventListener('resize', this.handleResize);
