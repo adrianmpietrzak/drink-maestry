@@ -58,6 +58,7 @@ body {
   background-color: rgba(0, 0, 0, 0.9);
   color: $second-color;
   overflow: scroll;
+  z-index: 999;
 }
 
 .popup__close {
