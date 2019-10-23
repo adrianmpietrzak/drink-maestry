@@ -2,7 +2,7 @@
   <div class="nav">
     <div class="nav__menu">
       <router-link class="nav__link" to="/">Home</router-link>
-      <router-link class="nav__link" to="/about">About</router-link>
+      <router-link class="nav__link" to="/drinks">Drinks</router-link>
     </div>
     <button class="nav__ingrediets" @click="showIngredients">
       Ingredients
