@@ -3,11 +3,14 @@
     <div class="box__category">
       <h2 class="box__category-name">{{ drinks.name }}</h2>
     </div>
-    <DrinkCard
-      v-for="drink in drinks.drinks"
-      :key="drink.idDrink"
-      :data="drink"
-    ></DrinkCard>
+    <!-- <strong>amount - {{ amount }} </strong> -->
+    <template v-for="(drink, index) in drinks.drinks">
+      <DrinkCard
+        :key="drink.idDrink"
+        :data="drink"
+        v-if="index < amount"
+      ></DrinkCard>
+    </template>
   </ul>
 </template>
 
@@ -20,7 +23,8 @@ export default {
     DrinkCard
   },
   props: {
-    drinks: Object
+    drinks: Object,
+    amount: { type: Number, default: 4 }
   }
 };
 </script>
@@ -46,9 +50,11 @@ export default {
   left: 50%;
   margin: 0;
   transform: translateX(-50%);
+  z-index: 1;
 }
 
 .box__category-name {
   font-size: 1.25rem;
+  margin: 0;
 }
 </style>
