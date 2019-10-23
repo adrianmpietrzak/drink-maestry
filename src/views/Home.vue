@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home container">
     <div class="random-drinks">
       <template v-if="drinksLoaded === 4">
         <DrinksBox :drinks="randomDrinks" />
@@ -147,8 +147,4 @@ export default {
 </script>
 
 <style lang="scss">
-.home {
-  max-width: 1170px;
-  margin: 0 auto;
-}
 </style>
