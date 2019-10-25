@@ -1,9 +1,31 @@
 <template>
   <div class="container">
     <!-- To do - change this view to display 2 tabs all drinks from owned ingredients / all drinks -->
+    <div class="tabs">
+      <input
+        class="tabs__selector-input"
+        type="radio"
+        name="selected-ingredients"
+        value="all"
+        id="all-ingredients"
+        v-model="selector"
+        @change="changeTab"
+      />
+      <label class="tabs__selector-label" for="all-ingredients">All</label>
+      <input
+        class="tabs__selector-input"
+        type="radio"
+        name="selected-ingredients"
+        value="owned"
+        id="owned-ingredients"
+        v-model="selector"
+        @change="changeTab"
+      />
+      <label class="tabs__selector-label" for="owned-ingredients">Owned</label>
+    </div>
     <DrinksBox
-      v-if="drinks.drinks.length > 0"
-      :drinks="drinks"
+      v-if="possibleDrinks.drinks.length > 0"
+      :drinks="possibleDrinks"
       :amount="amount"
     ></DrinksBox>
     <h2 v-else>Choose some ingredients (temporary message)</h2>
@@ -25,10 +47,15 @@ export default {
         height: 0
       },
       amount: 3,
-      amountToAdd: 3
+      amountToAdd: 3,
+      selector: 'all'
     };
   },
   methods: {
+    changeTab() {
+      console.log(this.selector);
+    },
+
     scroll() {
       let bottomOfWindow =
         Math.max(
@@ -59,7 +86,7 @@ export default {
       return this.$store.state.ownedIngredients;
     },
 
-    drinks() {
+    possibleDrinks() {
       return {
         name: 'Drinks from owned ingredients',
         drinks: this.$store.state.avilableDrinks
@@ -84,4 +111,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tabs {
+  margin-top: 30px;
+}
+
+.tabs__selector-label {
+  background-color: #f2f7f2;
+  color: #2a2d34;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.tabs__selector-input {
+  display: none;
+}
+
+.tabs__selector-input:checked + label {
+  background-color: #2a2d34;
+  color: #f2f7f2;
+}
 </style>

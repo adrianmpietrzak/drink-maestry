@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view />
+    <keep-alive include="Drinks" v-if="ownedIngredients.length > 0">
+      <router-view />
+    </keep-alive>
+
+    <router-view v-else />
+
     <div class="popup" v-show="popupVisibile">
       <IngredientsList :ingredients="allIngredients" />
       <button class="popup__close" @click="hideIngredients">x</button>
@@ -28,6 +33,10 @@ export default {
   computed: {
     allIngredients() {
       return this.$store.state.ingredients;
+    },
+
+    ownedIngredients() {
+      return this.$store.state.ownedIngredients;
     },
 
     popupVisibile() {
