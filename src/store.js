@@ -3,6 +3,20 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+function getUnique(arr, comp) {
+  const unique = arr
+    .map(e => e[comp])
+
+    // store the keys of the unique objects
+    .map((e, i, final) => final.indexOf(e) === i && i)
+
+    // eliminate the dead keys & store unique objects
+    .filter(e => arr[e])
+    .map(e => arr[e]);
+
+  return unique;
+}
+
 export default new Vuex.Store({
   state: {
     ingredients: [],
@@ -49,17 +63,15 @@ export default new Vuex.Store({
     checkStatus: () => {
       return new Promise(resolve => {
         if (!JSON.parse(localStorage.getItem('ingredients'))) {
-          Vue.http
-            .get('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list')
-            .then(
-              res => {
-                localStorage.setItem('ingredients', JSON.stringify(res.body));
-                resolve();
-              },
-              err => {
-                console.log('error', err);
-              }
-            );
+          Vue.http.get(`${process.env.VUE_APP_APIURL}list.php?i=list`).then(
+            res => {
+              localStorage.setItem('ingredients', JSON.stringify(res.body));
+              resolve();
+            },
+            err => {
+              console.log('error', err);
+            }
+          );
         } else {
           resolve();
         }
@@ -107,27 +119,11 @@ export default new Vuex.Store({
       const tempDrinks = [];
       const promises = [];
 
-      function getUnique(arr, comp) {
-        const unique = arr
-          .map(e => e[comp])
-
-          // store the keys of the unique objects
-          .map((e, i, final) => final.indexOf(e) === i && i)
-
-          // eliminate the dead keys & store unique objects
-          .filter(e => arr[e])
-          .map(e => arr[e]);
-
-        return unique;
-      }
-
       state.ownedIngredients.map(ingredient => {
         const promise = new Promise(resolve => {
           if (!localStorage.getItem([ingredient])) {
             Vue.http
-              .get(
-                `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`
-              )
+              .get(`${process.env.VUE_APP_APIURL}filter.php?i=${ingredient}`)
               .then(res => {
                 localStorage.setItem(
                   [ingredient],
@@ -151,13 +147,14 @@ export default new Vuex.Store({
     },
 
     loadDrinks: ({ state }, letter) => {
-      if (localStorage.getItem([letter])) {
+      if (
+        localStorage.getItem([letter]) &&
+        localStorage.getItem([letter]) !== 'null'
+      ) {
         state.allDrinks.push(...JSON.parse(localStorage.getItem([letter])));
       } else {
         Vue.http
-          .get(
-            `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`
-          )
+          .get(`${process.env.VUE_APP_APIURL}search.php?f=${letter}`)
           .then(res => {
             localStorage.setItem([letter], JSON.stringify(res.body.drinks));
             if (res.body.drinks) {

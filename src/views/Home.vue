@@ -25,6 +25,7 @@ export default {
   components: {
     DrinksBox
   },
+
   data() {
     return {
       randomDrinks: {
@@ -33,8 +34,7 @@ export default {
       },
       randomDrinksToShow: 4,
       drinksLoaded: 0,
-      ingredientDrinks: null,
-      test: 0
+      ingredientDrinks: null
     };
   },
 
@@ -46,22 +46,22 @@ export default {
       deep: true
     }
   },
+
   created() {
     // Get random drinks
     for (let i = 0; i < this.randomDrinksToShow; i++) {
-      this.$http
-        .get('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-        .then(res => {
-          const randomDrink = res.body.drinks[0];
-          const ifExist = this.randomDrinks.drinks.some(
-            drink => drink.idDrink === randomDrink.idDrink
-          );
-          if (!ifExist) {
-            this.randomDrinks.drinks.push(randomDrink);
-          } else {
-            i--;
-          }
-        });
+      this.$http.get(`${process.env.VUE_APP_APIURL}random.php`).then(res => {
+        const randomDrink = res.body.drinks[0];
+        const ifExist = this.randomDrinks.drinks.some(
+          drink => drink.idDrink === randomDrink.idDrink
+        );
+
+        if (!ifExist) {
+          this.randomDrinks.drinks.push(randomDrink);
+        } else {
+          i--;
+        }
+      });
     }
 
     // Get up to 4 drinks from owned ingredients
@@ -69,6 +69,7 @@ export default {
       const randomIngredient = this.ownedIngredients[
         Math.floor(Math.random() * this.ownedIngredients.length)
       ];
+
       if (localStorage.getItem([randomIngredient])) {
         const randomIngredientDrinks = [];
         const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
@@ -77,11 +78,13 @@ export default {
         for (let i = 0; i < drinksToShow; i++) {
           const drink = drinks[Math.floor(Math.random() * drinks.length)];
           let exist = false;
-          randomIngredientDrinks.map(el => {
-            if (el.idDrink === drink.idDrink) {
+
+          randomIngredientDrinks.map(randomDrink => {
+            if (randomDrink.idDrink === drink.idDrink) {
               exist = true;
             }
           });
+
           if (!exist) {
             randomIngredientDrinks.push(drink);
           } else {
@@ -102,6 +105,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-</style>

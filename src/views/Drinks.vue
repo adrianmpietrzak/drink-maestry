@@ -34,6 +34,7 @@
         </h3>
       </template>
     </keep-alive>
+
     <keep-alive>
       <template v-if="selector === 'all'">
         <DrinksBox
@@ -82,7 +83,6 @@ export default {
         'm',
         'n',
         'o',
-        'u',
         'p',
         'q',
         'r',
@@ -98,7 +98,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadDrinks']),
+    ...mapActions(['loadDrinks', 'addDrinks']),
 
     scroll() {
       let bottomOfWindow =
@@ -110,14 +110,13 @@ export default {
           window.innerHeight +
           100 >
         document.documentElement.offsetHeight;
-      if (bottomOfWindow) {
-        if (this.selector === 'all') {
-          this.allAmount += this.amountToAdd;
-        } else {
-          this.amount += this.amountToAdd;
-        }
 
-        if (this.letterIndex <= this.letters.length) {
+      if (bottomOfWindow) {
+        this.selector === 'all'
+          ? (this.allAmount += this.amountToAdd)
+          : (this.amount += this.amountToAdd);
+
+        if (this.letterIndex < this.letters.length && this.selector === 'all') {
           this.loadDrinks(this.letters[this.letterIndex]);
           this.letterIndex++;
         }
@@ -137,10 +136,12 @@ export default {
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
+
       this.amountToAdd =
         this.window.width < 768 ? 3 : this.window.width < 1024 ? 6 : 12;
     }
   },
+
   computed: {
     ownedIngredients() {
       return this.$store.state.ownedIngredients;
@@ -163,12 +164,19 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('addDrinks');
+    // if (this.possibleDrinks.drinks.length === 0) {
+    this.addDrinks();
+    // }
+
+    // if (this.allDrinks.drinks.length === 0) {
     this.loadDrinks(this.letters[this.letterIndex]);
     this.letterIndex++;
+    // }
+
     window.addEventListener('scroll', this.scroll);
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+
     this.amount =
       this.window.width < 768 ? 3 : this.window.width < 1024 ? 6 : 12;
     this.allAmount =
@@ -178,6 +186,10 @@ export default {
   destroyed() {
     window.removeEventListener('scroll', this.scroll);
     window.removeEventListener('resize', this.handleResize);
+  },
+
+  watch: {
+    selector() {}
   }
 };
 </script>

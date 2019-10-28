@@ -33,7 +33,7 @@ export default {
     if (!exist) {
       this.$http
         .get(
-          `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${this.$route.params.id}`
+          `${process.env.VUE_APP_APIURL}lookup.php?i=${this.$route.params.id}`
         )
         .then(
           res => {
@@ -66,6 +66,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

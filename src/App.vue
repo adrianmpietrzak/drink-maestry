@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <Navbar />
-    <keep-alive include="Drinks" v-if="ownedIngredients.length > 0">
-      <router-view />
-    </keep-alive>
+    <header class="header" ref="header">
+      <Navbar />
+    </header>
 
-    <router-view v-else />
+    <main :style="{ paddingTop: `${headerHeight}px` }">
+      <keep-alive include="Drinks">
+        <router-view />
+      </keep-alive>
 
-    <div class="popup" v-show="popupVisibile">
-      <IngredientsList :ingredients="allIngredients" />
-      <button class="popup__close" @click="hideIngredients">x</button>
-    </div>
+      <div class="popup" v-show="popupVisibile">
+        <IngredientsList :ingredients="allIngredients" />
+        <button class="popup__close" @click="hideIngredients">x</button>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -26,13 +29,23 @@ export default {
     Navbar,
     IngredientsList
   },
+
+  data() {
+    return {
+      headerHeight: null,
+      color: 'red'
+    };
+  },
+
   beforeCreate() {
     this.$store.dispatch('callIngredients');
     this.$store.dispatch('getOwnedIngredients');
-    if (!localStorage.getItem('ownedIngredients')) {
-      localStorage.setItem('ownedIngredients', JSON.stringify([]));
-    }
   },
+
+  mounted() {
+    this.headerHeight = this.$refs.header.clientHeight;
+  },
+
   computed: {
     allIngredients() {
       return this.$store.state.ingredients;
@@ -46,6 +59,7 @@ export default {
       return this.$store.state.displayIngredients;
     }
   },
+
   methods: {
     ...mapMutations(['hideIngredients'])
   }
@@ -55,10 +69,6 @@ export default {
 <style lang="scss">
 body {
   background-color: $second-color;
-}
-
-.black {
-  color: #000;
 }
 
 .popup {
@@ -85,9 +95,14 @@ body {
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
   &:hover {
-    // color: $first-color;
-    // background-color: $second-color;
     color: $third-color;
   }
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
 }
 </style>

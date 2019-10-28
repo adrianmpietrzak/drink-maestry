@@ -7,6 +7,7 @@ Vue.use(Router);
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  linkActiveClass: 'nav__link--active',
   routes: [
     {
       path: '/',
@@ -25,6 +26,10 @@ export default new Router({
 
       component: () =>
         import(/* webpackChunkName: "ingredients" */ './views/Drink.vue')
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 });

@@ -1,8 +1,8 @@
 <template>
-  <div class="nav">
+  <nav class="nav">
     <div class="nav__menu">
-      <router-link class="nav__link" to="/">Home</router-link>
-      <router-link class="nav__link" to="/drinks">Drinks</router-link>
+      <router-link class="nav__link" to="/" exact>Home</router-link>
+      <router-link class="nav__link" to="/drinks" exact>Drinks</router-link>
     </div>
     <button class="nav__ingrediets" @click="showIngredients">
       Ingredients
@@ -10,11 +10,12 @@
         $store.state.ownedIngredients.length
       }}</span>
     </button>
-  </div>
+  </nav>
 </template>
 
 <script>
 import { mapMutations } from 'vuex';
+
 export default {
   name: 'Navbar',
   methods: {
@@ -44,6 +45,11 @@ export default {
     background-color: $second-color;
     color: $first-color;
   }
+}
+
+.nav__link--active {
+  background-color: $second-color;
+  color: $first-color;
 }
 
 .nav__ingrediets {
