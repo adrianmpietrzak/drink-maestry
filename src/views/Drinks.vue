@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <!-- To do - change this view to display 2 tabs all drinks from owned ingredients / all drinks -->
     <div class="tabs">
+      <h2 class="tabs__header">From which ingredients list drinks:</h2>
       <input
         class="tabs__selector-input"
         type="radio"
@@ -9,7 +9,6 @@
         value="all"
         id="all-ingredients"
         v-model="selector"
-        @change="changeTab"
       />
       <label class="tabs__selector-label" for="all-ingredients">All</label>
       <input
@@ -19,21 +18,37 @@
         value="owned"
         id="owned-ingredients"
         v-model="selector"
-        @change="changeTab"
       />
       <label class="tabs__selector-label" for="owned-ingredients">Owned</label>
     </div>
-    <DrinksBox
-      v-if="possibleDrinks.drinks.length > 0"
-      :drinks="possibleDrinks"
-      :amount="amount"
-    ></DrinksBox>
-    <h2 v-else>Choose some ingredients (temporary message)</h2>
+    <keep-alive>
+      <template v-if="selector === 'owned'">
+        <DrinksBox
+          v-if="possibleDrinks.drinks.length > 0"
+          :drinks="possibleDrinks"
+          :amount="amount"
+          :selector="selector"
+        ></DrinksBox>
+        <h3 class="placeholder-message" v-else>
+          Choose some ingredients (temporary message)
+        </h3>
+      </template>
+    </keep-alive>
+    <keep-alive>
+      <template v-if="selector === 'all'">
+        <DrinksBox
+          :drinks="allDrinks"
+          :amount="allAmount"
+          :selector="selector"
+        ></DrinksBox>
+      </template>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import DrinksBox from '../components/Drinks/DrinksBox';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Drinks',
@@ -47,14 +62,43 @@ export default {
         height: 0
       },
       amount: 3,
+      allAmount: 3,
       amountToAdd: 3,
-      selector: 'all'
+      selector: 'owned',
+      letterIndex: 0,
+      letters: [
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'u',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z'
+      ]
     };
   },
   methods: {
-    changeTab() {
-      console.log(this.selector);
-    },
+    ...mapActions(['loadDrinks']),
 
     scroll() {
       let bottomOfWindow =
@@ -67,10 +111,26 @@ export default {
           100 >
         document.documentElement.offsetHeight;
       if (bottomOfWindow) {
-        this.amount += this.amountToAdd;
+        if (this.selector === 'all') {
+          this.allAmount += this.amountToAdd;
+        } else {
+          this.amount += this.amountToAdd;
+        }
+
+        if (this.letterIndex <= this.letters.length) {
+          this.loadDrinks(this.letters[this.letterIndex]);
+          this.letterIndex++;
+        }
       }
-      if (this.amount > this.possibleDrinks.drinks.length) {
-        window.removeEventListener('scroll', this.scroll);
+
+      if (this.selector === 'owned') {
+        if (this.amount > this.possibleDrinks.drinks.length) {
+          window.removeEventListener('scroll', this.scroll);
+        }
+      } else {
+        if (this.allAmount > this.allDrinks.drinks.length) {
+          window.removeEventListener('scroll', this.scroll);
+        }
       }
     },
 
@@ -92,15 +152,26 @@ export default {
         name: 'Drinks from owned ingredients',
         drinks: this.$store.state.avilableDrinks
       };
+    },
+
+    allDrinks() {
+      return {
+        name: 'All drinks',
+        drinks: this.$store.state.allDrinks
+      };
     }
   },
 
   created() {
     this.$store.dispatch('addDrinks');
+    this.loadDrinks(this.letters[this.letterIndex]);
+    this.letterIndex++;
     window.addEventListener('scroll', this.scroll);
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
     this.amount =
+      this.window.width < 768 ? 3 : this.window.width < 1024 ? 6 : 12;
+    this.allAmount =
       this.window.width < 768 ? 3 : this.window.width < 1024 ? 6 : 12;
   },
 
@@ -114,6 +185,11 @@ export default {
 <style lang="scss" scoped>
 .tabs {
   margin-top: 30px;
+  text-align: center;
+}
+
+.tabs__header {
+  color: $first-color;
 }
 
 .tabs__selector-label {
@@ -131,5 +207,10 @@ export default {
 .tabs__selector-input:checked + label {
   background-color: #2a2d34;
   color: #f2f7f2;
+}
+
+.placeholder-message {
+  color: $first-color;
+  text-align: center;
 }
 </style>

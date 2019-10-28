@@ -8,7 +8,8 @@ export default new Vuex.Store({
     ingredients: [],
     ownedIngredients: [],
     avilableDrinks: [],
-    displayIngredients: false
+    displayIngredients: false,
+    allDrinks: []
   },
 
   mutations: {
@@ -142,10 +143,28 @@ export default new Vuex.Store({
         });
         promises.push(promise);
       });
+
       Promise.all(promises).then(() => {
         const uniqueDrinks = getUnique(tempDrinks, 'strDrink');
         state.avilableDrinks = uniqueDrinks;
       });
+    },
+
+    loadDrinks: ({ state }, letter) => {
+      if (localStorage.getItem([letter])) {
+        state.allDrinks.push(...JSON.parse(localStorage.getItem([letter])));
+      } else {
+        Vue.http
+          .get(
+            `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`
+          )
+          .then(res => {
+            localStorage.setItem([letter], JSON.stringify(res.body.drinks));
+            if (res.body.drinks) {
+              state.allDrinks.push(...res.body.drinks);
+            }
+          });
+      }
     }
   }
 });

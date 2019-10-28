@@ -5,7 +5,7 @@
     </div>
     <template v-for="(drink, index) in drinks.drinks">
       <DrinkCard
-        :key="drink.idDrink"
+        :key="selector + drink.idDrink"
         :data="drink"
         v-if="index < amount"
       ></DrinkCard>
@@ -23,7 +23,8 @@ export default {
   },
   props: {
     drinks: Object,
-    amount: { type: Number, default: 4 }
+    amount: { type: Number, default: 4 },
+    selector: String
   }
 };
 </script>
