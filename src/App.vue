@@ -32,8 +32,7 @@ export default {
 
   data() {
     return {
-      headerHeight: null,
-      color: 'red'
+      headerHeight: null
     };
   },
 
