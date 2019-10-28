@@ -33,9 +33,11 @@ export default {
       },
       randomDrinksToShow: 4,
       drinksLoaded: 0,
-      ingredientDrinks: null
+      ingredientDrinks: null,
+      test: 0
     };
   },
+
   watch: {
     randomDrinks: {
       handler() {
@@ -67,28 +69,30 @@ export default {
       const randomIngredient = this.ownedIngredients[
         Math.floor(Math.random() * this.ownedIngredients.length)
       ];
-      const randomIngredientDrinks = [];
-      const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
-      const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
+      if (localStorage.getItem([randomIngredient])) {
+        const randomIngredientDrinks = [];
+        const drinks = JSON.parse(localStorage.getItem([randomIngredient]));
+        const drinksToShow = drinks.length > 4 ? 4 : drinks.length;
 
-      for (let i = 0; i < drinksToShow; i++) {
-        const drink = drinks[Math.floor(Math.random() * drinks.length)];
-        let exist = false;
-        randomIngredientDrinks.map(el => {
-          if (el.idDrink === drink.idDrink) {
-            exist = true;
+        for (let i = 0; i < drinksToShow; i++) {
+          const drink = drinks[Math.floor(Math.random() * drinks.length)];
+          let exist = false;
+          randomIngredientDrinks.map(el => {
+            if (el.idDrink === drink.idDrink) {
+              exist = true;
+            }
+          });
+          if (!exist) {
+            randomIngredientDrinks.push(drink);
+          } else {
+            i--;
           }
-        });
-        if (!exist) {
-          randomIngredientDrinks.push(drink);
-        } else {
-          i--;
         }
+        this.ingredientDrinks = {
+          name: `Drinks from ${randomIngredient}`,
+          drinks: randomIngredientDrinks
+        };
       }
-      this.ingredientDrinks = {
-        name: `Drinks from ${randomIngredient}`,
-        drinks: randomIngredientDrinks
-      };
     }
   },
   computed: {

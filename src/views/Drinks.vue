@@ -69,7 +69,7 @@ export default {
       if (bottomOfWindow) {
         this.amount += this.amountToAdd;
       }
-      if (this.amount > this.drinks.length) {
+      if (this.amount > this.possibleDrinks.drinks.length) {
         window.removeEventListener('scroll', this.scroll);
       }
     },
@@ -87,6 +87,7 @@ export default {
     },
 
     possibleDrinks() {
+      window.addEventListener('scroll', this.scroll);
       return {
         name: 'Drinks from owned ingredients',
         drinks: this.$store.state.avilableDrinks

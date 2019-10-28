@@ -29,6 +29,9 @@ export default {
   beforeCreate() {
     this.$store.dispatch('callIngredients');
     this.$store.dispatch('getOwnedIngredients');
+    if (!localStorage.getItem('ownedIngredients')) {
+      localStorage.setItem('ownedIngredients', JSON.stringify([]));
+    }
   },
   computed: {
     allIngredients() {
